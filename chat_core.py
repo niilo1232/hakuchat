@@ -124,7 +124,7 @@ def chat(messages: list[dict], user_message: str | None = None, max_iterations: 
         )
 
         message = response.choices[0].message
-        messages.append(message)
+        messages.append(message.model_dump(exclude_none=True))
 
         if not message.tool_calls:
             return message.content or ""
