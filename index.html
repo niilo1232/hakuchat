@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+</head>
+<body>
+    <h1>Chat</h1>
+    <div id="chat"></div>
+    <form id="form">
+        <input type="text" id="input" placeholder="Type a message..." required>
+        <button type="submit">Send</button>
+    </form>
+    <script>
+        const form = document.getElementById("form");
+        const input = document.getElementById("input");
+        const chat = document.getElementById("chat");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const text = input.value;
+            input.value = "";
+
+            const userDiv = document.createElement("div");
+            userDiv.textContent = "You: " + text;
+            chat.appendChild(userDiv);
+
+            const res = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: text })
+            });
+            const data = await res.json();
+
+            const aiDiv = document.createElement("div");
+            aiDiv.textContent = "AI: " + data.response;
+            chat.appendChild(aiDiv);
+        });
+    </script>
+</body>
+</html>
